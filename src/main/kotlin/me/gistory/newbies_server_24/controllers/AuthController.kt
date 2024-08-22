@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/auth")
 class AuthController(private val authService: AuthService) {
     @PostMapping("/login")
-    fun login(@RequestBody data: LoginRequestDto) = authService.login()
+    fun login(@RequestBody data: LoginRequestDto) = authService.login(data)
 
     @PostMapping("/register")
-    fun register(@RequestBody data: RegisterRequestDto) = authService.register()
+    fun register(@RequestBody data: RegisterRequestDto) = authService.register(data)
 }
