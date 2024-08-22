@@ -1,6 +1,7 @@
 package me.gistory.newbies_server_24.controllers
 
 import me.gistory.newbies_server_24.dto.LoginRequestDto
+import me.gistory.newbies_server_24.dto.RegisterRequestDto
 import me.gistory.newbies_server_24.services.AuthService
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -14,5 +15,5 @@ class AuthController(private val authService: AuthService) {
     fun login(@RequestBody data: LoginRequestDto) = authService.login()
 
     @PostMapping("/register")
-    fun register() = authService.register()
+    fun register(@RequestBody data: RegisterRequestDto) = authService.register()
 }
