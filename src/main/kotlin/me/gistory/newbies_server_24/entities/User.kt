@@ -10,8 +10,9 @@ import java.util.UUID
 @Entity
 @Table(name = "users")
 class User(
-    @Id @GeneratedValue val id: UUID,
     @Column(unique = true)
     val email: String,
     val password: String,
-)
+){
+    @Id @GeneratedValue val id: UUID = UUID.randomUUID()
+}
