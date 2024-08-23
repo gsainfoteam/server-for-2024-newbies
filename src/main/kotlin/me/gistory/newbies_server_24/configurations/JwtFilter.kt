@@ -23,7 +23,8 @@ class JwtFilter(private val tokenProvider: TokenProvider) : GenericFilterBean() 
 
     private fun resolveToken(req: HttpServletRequest): String? {
         return req.getHeader(AUTHORIZATION_HEADER)?.let { authorization ->
-            authorization.split("Bearer ").lastOrNull().let {
+            if (!authorization.startsWith("Bearer ")) return null
+            authorization.split(" ").elementAtOrNull(1).let {
                 if (it.isNullOrBlank()) null else it
             }
         }
