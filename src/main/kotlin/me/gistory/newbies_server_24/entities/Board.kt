@@ -1,6 +1,7 @@
 package me.gistory.newbies_server_24.entities
 
 import jakarta.persistence.*
+import me.gistory.newbies_server_24.dto.BoardSummaryDto
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import java.util.*
@@ -25,4 +26,11 @@ class Board(
     @Column(nullable = false)
     @UpdateTimestamp
     val updatedAt: Date = Date()
+
+    fun toSummaryDto() = BoardSummaryDto(
+        id = id,
+        title = title,
+        creator = createdBy.toDto(),
+        createdAt = createdAt,
+    )
 }
