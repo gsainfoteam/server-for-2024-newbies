@@ -42,7 +42,7 @@ class AuthService(
 
     private fun generateToken(user: User): String {
         val authenticationToken = UsernamePasswordAuthenticationToken(user.email, user.password)
-        SecurityContextHolder.getContext().authentication = authenticationToken;
+        SecurityContextHolder.getContext().authentication = authenticationToken
         val jwt = tokenProvider.createToken(authenticationToken)
         return jwt
     }
