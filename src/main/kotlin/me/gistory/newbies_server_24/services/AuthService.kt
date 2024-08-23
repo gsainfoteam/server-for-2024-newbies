@@ -30,16 +30,17 @@ class AuthService(
         }
         return generateToken(user)
     }
+
     fun register(registerRequestDto: RegisterRequestDto): String {
         logger.info("register with email: `{}`", registerRequestDto.email)
         authRepository.findByEmail(registerRequestDto.email)?.let { throw UserAlreadyExistException() }
         val user = User(
             email = registerRequestDto.email,
-            password =  passwordEncoder.encode(registerRequestDto.password)
+            password = passwordEncoder.encode(registerRequestDto.password)
         ).also { authRepository.save(it) }
         return generateToken(user)
     }
-
+    
     private fun generateToken(user: User): String {
         val authenticationToken = UsernamePasswordAuthenticationToken(user.email, user.password)
         SecurityContextHolder.getContext().authentication = authenticationToken
