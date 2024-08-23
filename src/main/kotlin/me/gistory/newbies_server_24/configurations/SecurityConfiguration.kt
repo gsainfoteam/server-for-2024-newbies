@@ -3,6 +3,7 @@ package me.gistory.newbies_server_24.configurations
 import me.gistory.newbies_server_24.providers.TokenProvider
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
@@ -20,9 +21,12 @@ class SecurityConfiguration {
     fun securityFilterChain(httpSecurity: HttpSecurity, tokenProvider: TokenProvider): SecurityFilterChain =
         httpSecurity
             .csrf { csrf -> csrf.disable() }
+            .cors(Customizer.withDefaults())
             .headers { headers ->
                 headers.frameOptions { it.sameOrigin() }
             }
+            .formLogin { form -> form.disable() }
+            .httpBasic { basic -> basic.disable() }
             .sessionManagement { session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
