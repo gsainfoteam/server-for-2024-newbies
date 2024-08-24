@@ -1,5 +1,6 @@
 package me.gistory.newbies_server_24.controllers
 
+import io.swagger.v3.oas.annotations.tags.Tag
 import me.gistory.newbies_server_24.dto.BoardListDto
 import me.gistory.newbies_server_24.entities.Board
 import me.gistory.newbies_server_24.services.BoardService
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
+@Tag(name="Board")
 @RestController
 @RequestMapping("/boards")
 class BoardController(private val boardService: BoardService) {
