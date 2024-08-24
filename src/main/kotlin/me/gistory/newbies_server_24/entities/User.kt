@@ -25,5 +25,9 @@ class User(
     @UpdateTimestamp
     val updatedAt: Date = Date()
 
-    fun toDto() = UserDto(id = id, nickname = nickname)
+    fun toDto() = UserDto(
+        id = id,
+        nickname = nickname,
+        createdAt = createdAt,
+    )
 }

@@ -5,4 +5,5 @@ import java.util.*
 data class UserDto(
     val id: UUID,
     val nickname: String,
+    val createdAt: Date,
 )
