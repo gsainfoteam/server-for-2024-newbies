@@ -59,7 +59,7 @@ jobs:
         run: ./gradlew assemble
 
       - name: Build, tag, and push image to ghcr.io
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: true
