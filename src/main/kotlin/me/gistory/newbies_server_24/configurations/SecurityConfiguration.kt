@@ -31,7 +31,7 @@ class SecurityConfiguration {
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
             .authorizeHttpRequests { req ->
-                req.requestMatchers("/swagger-ui/**" , "v3/api-docs/**", "/api").permitAll()
+                req.requestMatchers("/swagger-ui/**" , "v3/api-docs/**").permitAll()
                 req.requestMatchers("/auth/login", "/auth/register").permitAll()
                 req.requestMatchers("/error").permitAll()
                 req.requestMatchers("/").permitAll()
