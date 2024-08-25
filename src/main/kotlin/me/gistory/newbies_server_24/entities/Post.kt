@@ -17,10 +17,14 @@ class Post(
     @ManyToMany
     @JoinTable(name = "post_to_tag")
     val tags: MutableSet<Tag>,
+
+    @ManyToOne
+    @JoinColumn(name = "board_id")
+    val board: Board,
 ) {
     @Id
     @GeneratedValue
-    val id: Long ?= null
+    val id: UUID = UUID.randomUUID()
 
     @Column(nullable = false)
     @CreationTimestamp
