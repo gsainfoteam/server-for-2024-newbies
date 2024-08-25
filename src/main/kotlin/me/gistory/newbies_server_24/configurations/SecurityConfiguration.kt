@@ -22,7 +22,7 @@ class SecurityConfiguration {
     fun securityFilterChain(httpSecurity: HttpSecurity, tokenProvider: TokenProvider): SecurityFilterChain =
         httpSecurity
             .csrf { csrf -> csrf.disable() }
-            .cors(Customizer.withDefaults())
+            .cors { it.disable() }
             .headers { headers ->
                 headers.frameOptions { it.sameOrigin() }
             }
@@ -33,7 +33,7 @@ class SecurityConfiguration {
             }
             .authorizeHttpRequests { req ->
                 req.requestMatchers(HttpMethod.GET).permitAll()
-                req.requestMatchers("/swagger-ui/**" , "v3/api-docs/**").permitAll()
+                req.requestMatchers("/swagger-ui/**" , "v3/api-docs/**", "/api-docs/**").permitAll()
                 req.requestMatchers("/auth/login", "/auth/register").permitAll()
                 req.requestMatchers("/error").permitAll()
                 req.requestMatchers("/").permitAll()
@@ -41,4 +41,6 @@ class SecurityConfiguration {
             }
             .addFilterBefore(JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter::class.java)
             .build()
+
+
 }
