@@ -13,3 +13,7 @@ data class BoardListDto(
     val count: Int,
     val list: List<BoardSummaryDto>,
 )
+
+data class CreateBoardRequestDto(
+    val title: String,
+)

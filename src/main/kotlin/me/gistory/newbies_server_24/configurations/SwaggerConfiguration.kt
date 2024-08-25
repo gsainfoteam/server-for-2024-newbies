@@ -3,6 +3,7 @@ package me.gistory.newbies_server_24.configurations
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityScheme
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -11,7 +12,15 @@ import org.springframework.context.annotation.Configuration
 class SwaggerConfiguration {
     @Bean
     fun openAPI(): OpenAPI = OpenAPI()
-        .components(Components())
+        .components(Components()
+            .addSecuritySchemes(
+                "Bearer Authorization",
+                SecurityScheme()
+                    .type(SecurityScheme.Type.HTTP)
+                    .scheme("bearer")
+                    .bearerFormat("JWT")
+            )
+        )
         .info(apiInfo())
 
     private fun apiInfo() = Info()
