@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*
 
 @Tag(name = "Tag")
 @RestController
-@SecurityRequirement(name = "Bearer Authorization")
 @RequestMapping("/tag")
 class TagController (
     private val tagService: TagService,
@@ -34,6 +33,7 @@ class TagController (
         )
     }
 
+    @SecurityRequirement(name = "Bearer Authorization")
     @PostMapping("")
     fun createTag(@RequestBody tag: TagDto): TagDto {
         return tagService.createTag(tag.key).toTagDto()

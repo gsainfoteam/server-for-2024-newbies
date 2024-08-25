@@ -3,6 +3,7 @@ package me.gistory.newbies_server_24.configurations
 import me.gistory.newbies_server_24.providers.TokenProvider
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
@@ -31,6 +32,7 @@ class SecurityConfiguration {
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
             .authorizeHttpRequests { req ->
+                req.requestMatchers(HttpMethod.GET).permitAll()
                 req.requestMatchers("/swagger-ui/**" , "v3/api-docs/**").permitAll()
                 req.requestMatchers("/auth/login", "/auth/register").permitAll()
                 req.requestMatchers("/error").permitAll()

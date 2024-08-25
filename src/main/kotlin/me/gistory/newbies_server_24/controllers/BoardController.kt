@@ -13,7 +13,6 @@ import java.util.*
 
 @Tag(name="Board")
 @RestController
-@SecurityRequirement(name = "Bearer Authorization")
 @RequestMapping("/boards")
 class BoardController(private val boardService: BoardService) {
 
@@ -26,6 +25,7 @@ class BoardController(private val boardService: BoardService) {
         )
     }
 
+    @SecurityRequirement(name = "Bearer Authorization")
     @PostMapping("")
     fun createBoard(
         authentication: Authentication,
@@ -34,6 +34,7 @@ class BoardController(private val boardService: BoardService) {
         return boardService.createBoard(body, authentication.name).toSummaryDto();
     }
 
+    @SecurityRequirement(name = "Bearer Authorization")
     @DeleteMapping("{uuid}")
     fun deleteBoard(
         authentication: Authentication,
