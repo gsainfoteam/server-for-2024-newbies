@@ -8,7 +8,3 @@ data class TagListDto (
     val count: Int,
     val list: List<TagDto>
 )
-
-data class CreateTagDto(
-    val key: String,
-)
