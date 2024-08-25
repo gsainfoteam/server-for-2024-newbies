@@ -1,5 +1,6 @@
 package me.gistory.newbies_server_24.controllers
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import me.gistory.newbies_server_24.dto.BoardListDto
 import me.gistory.newbies_server_24.entities.Board
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/boards")
 class BoardController(private val boardService: BoardService) {
+
+    @SecurityRequirement(name = "bearer")
     @GetMapping("")
     fun getBoards(): BoardListDto {
         val boards = boardService.getBoards()

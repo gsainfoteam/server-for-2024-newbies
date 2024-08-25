@@ -34,7 +34,7 @@ class TokenProvider(
 
     fun getAuthentication(token: String): Authentication {
         val payload = Jwts.parser().verifyWith(key).build().parse(token).payload as Claims
-        val authorities = payload["AUTH"].toString().split(",").map { SimpleGrantedAuthority(it) }
+        val authorities = if (payload["AUTH"] === "") ArrayList() else payload["AUTH"].toString().split(",").map { SimpleGrantedAuthority(it) }
         val user = User(payload.subject, "", authorities)
         return UsernamePasswordAuthenticationToken(user, token, authorities)
     }

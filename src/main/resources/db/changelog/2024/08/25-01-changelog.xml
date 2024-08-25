@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1724571617427-1" author="psw04">
+        <createSequence incrementBy="50" sequenceName="posts_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1724571617427-2" author="psw04">
+        <createTable tableName="post_to_tag">
+            <column name="post_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_post_to_tag"/>
+            </column>
+            <column name="tags_key" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_post_to_tag"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1724571617427-3" author="psw04">
+        <createTable tableName="posts">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_posts"/>
+            </column>
+            <column name="title" type="VARCHAR(255)"/>
+            <column name="body" type="VARCHAR(255)"/>
+            <column name="created_by" type="UUID"/>
+            <column name="created_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1724571617427-4" author="psw04">
+        <createTable tableName="tags">
+            <column name="key" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_tags"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1724571617427-5" author="psw04">
+        <addForeignKeyConstraint baseColumnNames="created_by" baseTableName="posts"
+                                 constraintName="FK_POSTS_ON_CREATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1724571617427-6" author="psw04">
+        <addForeignKeyConstraint baseColumnNames="post_id" baseTableName="post_to_tag"
+                                 constraintName="fk_postotag_on_post" referencedColumnNames="id"
+                                 referencedTableName="posts"/>
+    </changeSet>
+    <changeSet id="1724571617427-7" author="psw04">
+        <addForeignKeyConstraint baseColumnNames="tags_key" baseTableName="post_to_tag"
+                                 constraintName="fk_postotag_on_tag" referencedColumnNames="key"
+                                 referencedTableName="tags"/>
+    </changeSet>
+
+</databaseChangeLog>
