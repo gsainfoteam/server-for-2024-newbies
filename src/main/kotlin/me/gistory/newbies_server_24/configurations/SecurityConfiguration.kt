@@ -34,7 +34,7 @@ class SecurityConfiguration {
             .authorizeHttpRequests { req ->
                 req.requestMatchers(HttpMethod.GET).permitAll()
                 req.requestMatchers("/swagger-ui/**" , "v3/api-docs/**", "/api-docs/**").permitAll()
-                req.requestMatchers("/auth/login", "/auth/register").permitAll()
+                req.requestMatchers("/auth/login", "/auth/register", "auth/refresh").permitAll()
                 req.requestMatchers("/error").permitAll()
                 req.requestMatchers("/").permitAll()
                 req.anyRequest().authenticated()
