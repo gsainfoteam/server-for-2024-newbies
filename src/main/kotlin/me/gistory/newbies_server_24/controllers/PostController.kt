@@ -43,6 +43,11 @@ class PostController (
         )
     }
 
+    @GetMapping("/{uuid}")
+    fun getPost(@PathVariable uuid: String): PostDto {
+        return postService.getPost(UUID.fromString(uuid)).toPostDto()
+    }
+
     @SecurityRequirement(name = "Bearer Authorization")
     @PostMapping("")
     fun createPost(

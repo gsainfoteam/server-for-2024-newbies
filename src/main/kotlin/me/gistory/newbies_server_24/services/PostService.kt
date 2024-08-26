@@ -10,6 +10,7 @@ import me.gistory.newbies_server_24.repositories.BoardRepository
 import me.gistory.newbies_server_24.repositories.PostRepository
 import me.gistory.newbies_server_24.repositories.TagRepository
 import org.slf4j.LoggerFactory
+import org.springframework.data.crossstore.ChangeSetPersister
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.util.UUID
@@ -43,6 +44,10 @@ class PostService (
 
     fun searchPost(keyword: String): List<Post> {
         return postRepository.findByTitleContainingIgnoreCaseOrBodyContainingIgnoreCase(keyword, keyword)
+    }
+
+    fun getPost(uuid: UUID): Post {
+        return postRepository.findByIdOrNull(uuid) ?: throw ChangeSetPersister.NotFoundException()
     }
 
     fun createPost(dto: CreatePostDto, boardId: UUID, userEmail: String): Post {

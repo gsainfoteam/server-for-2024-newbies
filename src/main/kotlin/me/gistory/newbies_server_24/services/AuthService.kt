@@ -20,7 +20,6 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.*
-
 @Transactional
 @Service
 class AuthService(
@@ -44,7 +43,7 @@ class AuthService(
         )
     }
 
-    fun register(registerRequestDto: RegisterRequestDto): TokenResponseDto {
+    fun register(registerRequestDto: RegisterRequestDto) {
         logger.info("register with email: `{}`", registerRequestDto.email)
         authRepository.findByEmail(registerRequestDto.email)?.let { throw UserAlreadyExistException() }
         val user = User(
@@ -52,11 +51,6 @@ class AuthService(
             password = passwordEncoder.encode(registerRequestDto.password),
             nickname = registerRequestDto.nickname,
         ).also { authRepository.save(it) }
-        return TokenResponseDto(
-            accessToken = generateToken(user),
-            refreshToken = generateRefreshToken(user),
-            expiresIn = expiresIn,
-        )
     }
 
     fun refresh(refreshRequestDto: RefreshRequestDto): TokenResponseDto {
