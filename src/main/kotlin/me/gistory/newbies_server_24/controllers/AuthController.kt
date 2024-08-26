@@ -5,6 +5,7 @@ import me.gistory.newbies_server_24.dto.LoginRequestDto
 import me.gistory.newbies_server_24.dto.RefreshRequestDto
 import me.gistory.newbies_server_24.dto.RegisterRequestDto
 import me.gistory.newbies_server_24.dto.TokenResponseDto
+import me.gistory.newbies_server_24.exceptions.ForbiddenException
 import me.gistory.newbies_server_24.services.AuthService
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -22,5 +23,11 @@ class AuthController(private val authService: AuthService) {
     fun register(@RequestBody data: RegisterRequestDto) = authService.register(data)
 
     @PostMapping("/refresh")
-    fun refresh(@RequestBody data: RefreshRequestDto) = authService.refresh(data)
+    fun refresh(@RequestBody data: RefreshRequestDto): TokenResponseDto {
+        val data = authService.refresh(data)
+        if (data.expiresIn == 0) {
+            throw ForbiddenException()
+        }
+        return data
+    }
 }

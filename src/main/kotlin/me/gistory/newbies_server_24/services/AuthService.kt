@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.*
 
+@Transactional
 @Service
 class AuthService(
     private val authRepository: AuthRepository,
@@ -29,9 +30,8 @@ class AuthService(
     private val tokenProvider: TokenProvider,
 ) {
     private val logger = LoggerFactory.getLogger(AuthService::class.java)
-    private val expiresIn = 1000
+    private val expiresIn = 14 * 24 * 60 * 60 * 1000
 
-    @Transactional
     fun login(loginRequestDto: LoginRequestDto): TokenResponseDto {
         val user = authRepository.findByEmail(loginRequestDto.email) ?: throw UserNotFoundException()
         if (!passwordEncoder.matches(loginRequestDto.password, user.password)) {
@@ -44,7 +44,6 @@ class AuthService(
         )
     }
 
-    @Transactional
     fun register(registerRequestDto: RegisterRequestDto): TokenResponseDto {
         logger.info("register with email: `{}`", registerRequestDto.email)
         authRepository.findByEmail(registerRequestDto.email)?.let { throw UserAlreadyExistException() }
@@ -65,7 +64,11 @@ class AuthService(
         val refreshToken = refreshTokenRepository.findByIdOrNull(refreshRequestDto.refreshToken) ?: throw ForbiddenException()
         refreshTokenRepository.deleteById(refreshRequestDto.refreshToken)
         if (Date().toInstant().toEpochMilli() - refreshToken.createdAt.toInstant().toEpochMilli() > expiresIn) {
-            throw ForbiddenException()
+            return TokenResponseDto(
+                accessToken = "",
+                refreshToken = "",
+                expiresIn = 0,
+            )
         }
         return TokenResponseDto(
             accessToken = generateToken(refreshToken.user),
