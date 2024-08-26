@@ -8,8 +8,10 @@ import me.gistory.newbies_server_24.dto.PostListDto
 import me.gistory.newbies_server_24.dto.UpdatePostDto
 import me.gistory.newbies_server_24.entities.Post
 import me.gistory.newbies_server_24.services.PostService
+import org.springframework.http.MediaType
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 import java.util.*
 
 @Tag(name = "Post")
@@ -56,6 +58,26 @@ class PostController (
         authentication: Authentication
     ): PostDto {
         return postService.createPost(post, UUID.fromString(boardUuid), authentication.name).toPostDto()
+    }
+
+    @SecurityRequirement(name = "Bearer Authorization")
+    @PostMapping("/{uuid}/image", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
+    fun uploadImage(
+        @PathVariable("uuid") uuid: String,
+        @RequestPart("file") file: MultipartFile,
+        authentication: Authentication
+    ) {
+        return postService.uploadImage(UUID.fromString(uuid), file, authentication.name)
+    }
+
+    @SecurityRequirement(name = "Bearer Authorization")
+    @DeleteMapping("/{uuid}/image/{imageId}")
+    fun deleteImage(
+        @PathVariable("uuid") uuid: String,
+        @PathVariable("imageId") imageId: String,
+        authentication: Authentication
+    ) {
+        return postService.deleteImage(UUID.fromString(uuid), UUID.fromString(imageId), authentication.name )
     }
 
     @SecurityRequirement(name = "Bearer Authorization")

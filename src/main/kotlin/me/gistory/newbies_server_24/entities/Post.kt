@@ -22,6 +22,9 @@ class Post(
     @ManyToOne
     @JoinColumn(name = "board_id")
     val board: Board,
+
+    @OneToMany(targetEntity = Image::class , mappedBy = "post")
+    val images: MutableSet<Image>,
 ) {
     @Id
     @GeneratedValue
@@ -37,6 +40,7 @@ class Post(
             title = title,
             body = body,
             tags = tags.toList().map { it.key },
+            images = images.toList().map {it.toImageDto()},
             board = board.toSummaryDto(),
             createdAt = createdAt,
             createdBy = createdBy.toDto()

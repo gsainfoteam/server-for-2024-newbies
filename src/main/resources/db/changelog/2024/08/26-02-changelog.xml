@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1724679706789-1" author="psw04">
+        <createTable tableName="image">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_image"/>
+            </column>
+            <column name="image" type="TEXT"/>
+            <column name="post_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1724679706789-2" author="psw04">
+        <addForeignKeyConstraint baseColumnNames="post_id" baseTableName="image" constraintName="FK_IMAGE_ON_POST"
+                                 referencedColumnNames="id" referencedTableName="posts"/>
+    </changeSet>
+
+</databaseChangeLog>

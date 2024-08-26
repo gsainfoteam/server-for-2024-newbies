@@ -15,6 +15,11 @@ data class UpdatePostDto(
     val tags: List<String>?,
 )
 
+data class ImageDto (
+    val image: String,
+    val id: UUID
+)
+
 data class PostDto (
     val id: UUID,
     val title: String,
@@ -22,7 +27,8 @@ data class PostDto (
     val tags: List<String>,
     val board: BoardSummaryDto,
     val createdAt: Date,
-    val createdBy: UserDto
+    val createdBy: UserDto,
+    val images: List<ImageDto>,
 )
 
 data class PostListDto (

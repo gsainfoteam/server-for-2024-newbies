@@ -3,16 +3,18 @@ package me.gistory.newbies_server_24.services
 import jakarta.transaction.Transactional
 import me.gistory.newbies_server_24.dto.CreatePostDto
 import me.gistory.newbies_server_24.dto.UpdatePostDto
+import me.gistory.newbies_server_24.entities.Image
 import me.gistory.newbies_server_24.entities.Post
 import me.gistory.newbies_server_24.exceptions.*
-import me.gistory.newbies_server_24.repositories.AuthRepository
-import me.gistory.newbies_server_24.repositories.BoardRepository
-import me.gistory.newbies_server_24.repositories.PostRepository
-import me.gistory.newbies_server_24.repositories.TagRepository
+import me.gistory.newbies_server_24.repositories.*
 import org.slf4j.LoggerFactory
 import org.springframework.data.crossstore.ChangeSetPersister
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
+import java.util.ArrayList
+import java.util.Base64
+import java.util.HashSet
 import java.util.UUID
 
 @Service
@@ -22,6 +24,7 @@ class PostService (
     private val tagRepository: TagRepository,
     private val boardRepository: BoardRepository,
     private val authRepository: AuthRepository,
+    private val imageRepository: ImageRepository,
 ) {
     private val logger = LoggerFactory.getLogger(AuthService::class.java)
 
@@ -64,7 +67,29 @@ class PostService (
             tags = tags,
             createdBy = user,
             board = board,
+            images = HashSet()
         ))
+    }
+
+    fun uploadImage(uuid: UUID,file: MultipartFile, userEmail: String) {
+        val post = postRepository.findByIdOrNull(uuid) ?: throw PostNotFoundException()
+        val user = authRepository.findByEmail(userEmail) ?: throw UserNotFoundException()
+        if (post.createdBy.id != user.id) {
+            throw ForbiddenException()
+        }
+        imageRepository.save(Image(
+            image = encodeFileToBase64(file),
+            post = post
+        ))
+    }
+
+    fun deleteImage(uuid: UUID, imageUuid: UUID, userEmail: String) {
+        val post = postRepository.findByIdOrNull(uuid) ?: throw PostNotFoundException()
+        val user = authRepository.findByEmail(userEmail) ?: throw UserNotFoundException()
+        if (post.createdBy.id != user.id) {
+            throw ForbiddenException()
+        }
+        imageRepository.deleteById(imageUuid)
     }
 
     fun updatePost(dto: UpdatePostDto, postId: UUID, userEmail: String): Post {
@@ -94,5 +119,10 @@ class PostService (
             throw ForbiddenException()
         }
         postRepository.delete(post)
+    }
+
+    private fun encodeFileToBase64(file: MultipartFile): String {
+        val fileBytes = file.bytes
+        return Base64.getEncoder().encodeToString(fileBytes)
     }
 }
