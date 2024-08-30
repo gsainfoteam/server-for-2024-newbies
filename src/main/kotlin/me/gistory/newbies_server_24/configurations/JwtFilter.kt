@@ -12,8 +12,8 @@ import org.springframework.web.filter.GenericFilterBean
 class JwtFilter(private val tokenProvider: TokenProvider) : GenericFilterBean() {
     override fun doFilter(req: ServletRequest, res: ServletResponse, chain: FilterChain) {
         val request = req as HttpServletRequest
-        val token = resolveToken(request) ?: throw UnauthorizedException()
-        token.let {
+        val token = resolveToken(request)
+        token?.let {
             if (!tokenProvider.validateToken(it)) throw UnauthorizedException()
             tokenProvider.getAuthentication(it).let { authentication ->
                 SecurityContextHolder.getContext().authentication = authentication
