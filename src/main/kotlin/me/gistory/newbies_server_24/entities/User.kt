@@ -29,5 +29,6 @@ class User(
         id = id,
         nickname = nickname,
         createdAt = createdAt,
+        email = email,
     )
 }
